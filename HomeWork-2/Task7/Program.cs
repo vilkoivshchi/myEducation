@@ -14,13 +14,12 @@ namespace Task7
     class Program
     {
 
-
+        
         #region Task7
         static void PrintRecursively(int a, int b)
         {
-            Console.WriteLine($"a: {a}");
-            
-            
+
+            Console.WriteLine($"Текущее число: {a}");
             if (a < b)
             {
                 PrintRecursively(a + 1, b);
@@ -29,14 +28,23 @@ namespace Task7
         }
         static void Main(string[] args)
         {
-       
-            
-            int a = 1;
-            int b = 5;
+            Console.Write("Введите a: ");
+            int a = Int32.Parse(Console.ReadLine());
+            Console.Write("Введите b: ");
+            int b = Int32.Parse(Console.ReadLine());
             PrintRecursively(a, b);
-            
+            Console.WriteLine($"Сумма целых чисел от {a} до {b} : {RecursiveSumm(a, b)}");
             Console.ReadKey();
         }
+        #endregion
+        
+        #region Task7*
+
+        static int RecursiveSumm(int a, int b)
+        {
+        return a == b? b : a + RecursiveSumm(a + 1, b);
+        }
+
         #endregion
     }
 }

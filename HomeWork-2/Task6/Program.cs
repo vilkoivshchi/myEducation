@@ -34,7 +34,7 @@ namespace Task6
             // исходные двнные
             int numMin = 1;
             int numMax = 1000000000;
-
+            
             Console.WriteLine($"Считаю количество \"Хороших\" чисел от {numMin} до {numMax}. Наберитесь терпения...");
 
             int goodNumbersCount = GoodNumbers(numMin, numMax);
