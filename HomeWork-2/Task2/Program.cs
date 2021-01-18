@@ -8,6 +8,7 @@ namespace Task2
 {
     /// <summary>
     /// 2. Написать метод подсчета количества цифр числа.
+    /// Шмаков.
     /// </summary>
     class Program
     {
