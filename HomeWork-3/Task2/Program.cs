@@ -13,9 +13,43 @@ namespace Task2
     ///     б)  Добавить обработку исключительных ситуаций на то, что могут быть введены некорректные данные.
     ///         При возникновении ошибки вывести сообщение.Напишите соответствующую функцию;
     /// </summary>
+   
     class Program
     {
-      
+        
+        static int CheckInput(string input)
+        {
+            int inputInt;
+            if (Int32.TryParse(input, out inputInt))
+            {
+                // Если строка распарсилась, число > 0 и нечётное, то возвращаем значение
+                if (inputInt > 0 && inputInt % 2 != 0)
+                {
+                    return inputInt;
+                }
+                
+                else if (inputInt == 0)
+                {
+                    return 0;
+                }
+                
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"Нет!");
+                Console.ResetColor();
+                return -1;
+            }
+            
+
+        }
+        
+
         static void Main(string[] args)
         {
             int summ = 0;
@@ -23,19 +57,13 @@ namespace Task2
 
             do
             {
-                
+               
                 Console.Write("Введи число: ");
-                if (Int32.TryParse(Console.ReadLine(), out inputInt))
+                inputInt = CheckInput(Console.ReadLine());
+                
+                if(inputInt != -1)
                 {
-                    if (inputInt > 0 && inputInt % 2 != 0)
-                        summ += inputInt;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine($"Нет!");
-                    Console.ResetColor();
-                    inputInt = 1;
+                    summ += inputInt;
                 }
             }
             while (inputInt != 0);
@@ -45,4 +73,6 @@ namespace Task2
 
         }
     }
+    
+
 }
