@@ -53,52 +53,42 @@ namespace Task2
               }
             }
 
-        public int[] myArray;
+        public int[] myArray { get; }
 
         public GetArray(int[] a)
         {
             _a = a;
         }
 
-        // конструктор, который передаёт условия задачи, на выходе переменные, исп-ся внути класса
+        
+        /// <summary>
+        /// Создаёт массив заданной размерности и заполняет его числами от начального значения с заданным шагом.
+        /// <param name="size">Размерность</param>
+        /// <param name="startNum">Начальное число</param>
+        /// <param name="step">Шаг изменения значений</param>
         public GetArray(int size, int startNum, int step)
             {
                _size = size;
                _startNum = startNum;
                _step = step;
-                MakeArray();
+                myArray = new int[_size];
+               for (int i = 0; i < _size; i++)
+                {
+                    myArray[i] = _startNum + (_step * i);
+                }
             }
-
-
+      
         public int GetValue(int index)
         {
             return _a[index];
         }
         
 
-
-        /// <summary>
-        /// Создаёт массив заданной размерности и заполняет его числами от начального значения с заданным шагом.
-        /// <param name="size">Размерность</param>
-        /// <param name="startNum">Начальное число</param>
-        /// <param name="step">Шаг изменения значений</param>
-        public int[] MakeArray()
-        {
-            myArray = new int[_size];
-            
-            myArray[0] = _startNum;
-            for (int i = 1; i < _size; i++)
-                {
-                   myArray[i] = myArray[i - 1] + _step;
-                                       
-                }
-            return myArray;
-        }
-
-        public int Sum()
+        
+        public int Sum(int[] array)
             {
                 int summ = 0;
-                foreach (int a in myArray)
+                foreach (int a in array)
                 {
                     summ += a;
                 }
@@ -108,14 +98,14 @@ namespace Task2
         /// <summary>
         /// Инвертирует знак каждого элемента массива myArray
         /// </summary>
-        public int[] Inverse()
+        public int[] Inverse(int[] array)
             {
-                int[] array = new int[myArray.Length];
-                for (int i = 0; i < myArray.Length; i++)
+                int[] array1 = new int[array.Length];
+                for (int i = 0; i < array1.Length; i++)
                 {
-                    array[i] = -myArray[i];
+                    array1[i] = -array[i];
                 }
-                return array;
+                return array1;
             }
 
         /// <summary>
@@ -123,15 +113,15 @@ namespace Task2
         /// </summary>
         /// <param name="multi">Множитель</param>
         /// <return></return>
-        public int[] Multi(int multi)
+        public int[] Multi(int[] array, int multi)
             {
-                int[] array = new int[myArray.Length];
+                int[] array1 = new int[array.Length];
                 
-                for (int i = 0; i < array.Length; i++)
+                for (int i = 0; i < array1.Length; i++)
                 {
-                    array[i] = myArray[i] * multi;
+                    array1[i] = myArray[i] * multi;
                 }
-                return array;
+                return array1;
             }
 
         // сохраняем массив в файл
@@ -139,14 +129,14 @@ namespace Task2
         /// Сохранение массива построчно в файл
         /// </summary>
         /// <param name="filename">имя файла</param>
-        public string ToFile(string filename)
+        public string ToFile(int[] array1, string filename)
         {
             if (File.Exists(filename))
             {
                 StreamWriter writer = new StreamWriter(filename);
                 // записываем первой строкой размерность массива
-                writer.WriteLine(myArray.Length);
-                foreach (int a in myArray)
+                writer.WriteLine(array1.Length);
+                foreach (int a in array1)
                 {
                     writer.WriteLine(a);
                 }
@@ -165,14 +155,16 @@ namespace Task2
             {
                 StreamReader reader = new StreamReader(filename);
                 string str = reader.ReadLine();
-                int len = int.Parse(str);
-                int[] a = new int[len];
+                int len;
+                if(!int.TryParse(str, out len)) throw new Exception($"В строке 1 не число!");
+                if(len < 1) throw new Exception("Длина массива меньше единицы");
+                int[] array1 = new int[len];
                 for (int i = 0; i < len; i++)
                 {
-                    a[i] = int.Parse(reader.ReadLine());
+                     if(!int.TryParse(reader.ReadLine(), out array1[i])) throw new Exception($"В строке {i + 2} не число!");
                 }
                 reader.Close();
-                return a;
+                return array1;
             }
             else
             {
@@ -200,24 +192,23 @@ namespace Task2
         }
         // вот тут я не особоо понял условие задачи. Массив отсортирован изначально и на выходе будет всегда "1"
         
-        public int MaxCount
+        
+
+
+        public int MaxCount(int[] array1)
             {
-                get 
-                { 
-                 
-                int max;
+                int max = array1.Max();
                 int maxCount = 0;
-                max = myArray[myArray.Length - 1];
-                for (int i = myArray.Length - 1 ; i >= 0; i--)
+                
+                for (int i = 0 ; i < array1.Length; i++)
                 {
-                    if (myArray[i] >= max) 
+                    if (array1[i] == max) 
                         {
-                            max = myArray[i];
                             maxCount++;
                         }
                 }
                 return maxCount;
-                }
+                
             }
         
 
@@ -235,7 +226,7 @@ namespace Task2
         {
             #region a
             // Условия задачи
-            int size = 70;
+            int size = 9;
             int startNumber = 3;
             int step = 2;
             int multiplier = 51;
@@ -254,25 +245,27 @@ namespace Task2
             GetArray getArray = new GetArray(size, startNumber, step);
             // часть а
             int[] array = getArray.myArray;
-            int arrSumm = getArray.Sum();
-            int[] arrInverse = getArray.Inverse();
-            int[] arrMulti = getArray.Multi(multiplier);
+            int arrSumm = getArray.Sum(array);
+            int[] arrInverse = getArray.Inverse(array);
+            int[] arrMulti = getArray.Multi(array, multiplier);
+            int maxCount = getArray.MaxCount(array);
 
             // часть б
-            string saveResult = getArray.ToFile(filename2);
-            int[] arrFromFile = getArray.FromFile(filename2);
+            string saveResult = getArray.ToFile(array, filename2);
+            
 
 
 
             Console.Write($"Массив: ");
             int curTop = Console.CursorTop;
             Console.SetCursorPosition(curLeft, curTop);
+          
             foreach (int a in array)
                 {
                     Console.Write($"{a} ");
                 }
             Console.WriteLine();
-
+          
             Console.Write($"Сумма элементов массива: ");
             curTop = Console.CursorTop;
             Console.SetCursorPosition(curLeft, curTop);
@@ -301,14 +294,18 @@ namespace Task2
             Console.Write($"MaxCoint: ");
             curTop = Console.CursorTop;
             Console.SetCursorPosition(curLeft, curTop);
-            Console.Write(getArray.MaxCount);
+            Console.Write(maxCount);
 
             Console.WriteLine();
             Console.WriteLine(saveResult);
             // это в задание не входит, но должно быть удобно
             Console.WriteLine($"Нажмите <Enter> чтобы открыть файл или другую кнопку, чтобы продолжить выполнение...");
             if (Console.ReadKey().Key == ConsoleKey.Enter) System.Diagnostics.Process.Start(filename2);
+// в этом месте можно поменять содердимое файла
             Console.ReadKey();
+            int[] arrFromFile = getArray.FromFile(filename2);
+            
+            
             Console.Write($"Массив из файла: ");
             curTop = Console.CursorTop;
             Console.SetCursorPosition(curLeft, curTop);
