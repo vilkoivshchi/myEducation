@@ -7,13 +7,26 @@ using System.IO;
 
 namespace Task3
 {
-    
+    /// <summary>
+    /// 3. Решить задачу с логинами из предыдущего урока, 
+    /// только логины и пароли считать из файла в массив. 
+    /// Создайте структуру Account, содержащую Login и Password.
+    /// </summary>
     class Program
     {
+       
         struct Account
         {
+            public Account(string _login, string _pass)
+                {
+                    login = _login;
 
-            public string login, password;
+                    password = _pass;
+                }
+
+
+            public string login { get; }
+            public string password { get; }
             
         }
 
@@ -24,26 +37,16 @@ namespace Task3
             string passwordFromFile = reader.ReadLine();
             reader.Close();
 
+            string[] accountData = new string[] { loginFromFile, passwordFromFile };
+            Account account = new Account(accountData[0], accountData[1]);
+            
             bool validAuth = false;
 
-            if (login == loginFromFile && pass == passwordFromFile) validAuth = true;
+            if (login == account.login && pass == account.password) validAuth = true;
 
             return validAuth;
         }
-
-        static string[] ReadLogin(string filename)
-        {
-            StreamReader reader = new StreamReader(filename);
-            string login = reader.ReadLine();
-            string password = reader.ReadLine();
-            reader.Close();
-            string[] account = new string[] { login, password };
-            Account accStruct = new Account();
-            accStruct.login = login;
-            accStruct.password = password;
-            return account;
-        }
-
+        
         static void Main(string[] args)
         {
             string filename = "account.txt";
