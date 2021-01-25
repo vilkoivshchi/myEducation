@@ -53,8 +53,8 @@ namespace Task2
               }
             }
 
-        public int[] myArray { get; }
-
+        //public int[] myArray { get; }
+        public int[] myArray { get; set; }
         public GetArray(int[] a)
         {
             _a = a;
@@ -83,8 +83,12 @@ namespace Task2
             return _a[index];
         }
         
-
-        
+        /*
+        /// <summary>
+        /// Это метод. Возвращает сумму всех элементов массива, переданного извне.
+        /// </summary>
+        /// <param name="array">Массив</param>
+        /// <returns>Сумма</returns>
         public int Sum(int[] array)
             {
                 int summ = 0;
@@ -94,10 +98,28 @@ namespace Task2
                 }
                 return summ;
             }
-        
+        */
+        /// <summary>
+        /// Это свойство. Оно возвращает сумму элементов массива из конструктора.
+        /// </summary>
+        public int Sum
+        {
+            get
+            {
+                int summ = 0;
+                foreach (int a in myArray)
+                {
+                    summ += a;
+                }
+                return summ;
+            }
+        }
+
         /// <summary>
         /// Инвертирует знак каждого элемента массива myArray
         /// </summary>
+        /// <param name="array">Массив</param>
+        /// <returns>Массив синвертированными знаками</returns>
         public int[] Inverse(int[] array)
             {
                 int[] array1 = new int[array.Length];
@@ -148,7 +170,11 @@ namespace Task2
                 throw new FileNotFoundException();
             }
         }
-        
+        /// <summary>
+        /// Загружает массив из файла
+        /// </summary>
+        /// <param name="filename">Имя файла</param>
+        /// <returns>Массив</returns>
         public int[] FromFile(string filename)
         {
             if (File.Exists(filename))
@@ -190,11 +216,11 @@ namespace Task2
             }
 
         }
-        // вот тут я не особоо понял условие задачи. Массив отсортирован изначально и на выходе будет всегда "1"
-        
-        
-
-
+        /// <summary>
+        /// Количество максимальных элементов массива
+        /// </summary>
+        /// <param name="array1">Массив</param>
+        /// <returns></returns>
         public int MaxCount(int[] array1)
             {
                 int max = array1.Max();
@@ -245,7 +271,12 @@ namespace Task2
             GetArray getArray = new GetArray(size, startNumber, step);
             // часть а
             int[] array = getArray.myArray;
-            int arrSumm = getArray.Sum(array);
+            // это вызов метода
+            //int arrSumm = getArray.Sum(array);
+            // а это массив для проверки суммы
+            // getArray.myArray = new int[]{ 1,1,1,1,1,1,1,1,1};
+            // это вызов свойства
+            int arrSumm = getArray.Sum;
             int[] arrInverse = getArray.Inverse(array);
             int[] arrMulti = getArray.Multi(array, multiplier);
             int maxCount = getArray.MaxCount(array);

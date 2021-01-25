@@ -74,7 +74,7 @@ namespace Task3
             if (validAuth)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Аутентификация прошла усппешно");
+                Console.WriteLine("Аутентификация прошла успешно");
                 Console.ResetColor();
             }
             else
