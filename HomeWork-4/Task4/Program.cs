@@ -200,7 +200,8 @@ namespace Task4
             {
                 StreamWriter writer = new StreamWriter(filename);
                 // записываем первой строкой размерность массива
-
+                writer.WriteLine(array.GetLength(0));
+                writer.WriteLine(array.GetLength(1)); 
                 // writer.WriteLine(array1.Length);
                 for (int i = array.GetLowerBound(0); i <= array.GetUpperBound(0); i++)
                 {
@@ -218,25 +219,32 @@ namespace Task4
                 throw new FileNotFoundException();
             }
         }
-        /*
-        public int[,] Load2dArrayFromFile(filename)
+        
+        /// <summary>
+        /// Загружает двумерный массив из файла
+        /// </summary>
+        /// <param name="filename">Имя файла</param>
+        /// <returns></returns>
+        public int[,] Load2dArrayFromFile(string filename)
         {
             if (File.Exists(filename))
             {
                 StreamReader reader = new StreamReader(filename);
                 
-                string str = reader.ReadLine();
+                int dim1, dim2;
                 
-                if (!int.TryParse(str, out len)) throw new Exception($"В строке 1 не число!");
-                if (len < 1) throw new Exception("Длина массива меньше единицы");
-                int[] array1 = new int[len];
-                for (int i = 0; i < len; i++)
+
+                if (!int.TryParse(reader.ReadLine(), out dim1)) throw new Exception($"В строке 1 не число!");
+                if (!int.TryParse(reader.ReadLine(), out dim2)) throw new Exception($"В строке 2 не число!");
+                if (dim1 < 1 || dim2 < 1) throw new Exception("Хотя бы одно измерение массива < 1");
+                int[,] array1 = new int[dim1, dim2];
+                for (int i = 0; i < dim1; i++)
                 {
-                    if (!int.TryParse(reader.ReadLine(), out array1[i])) throw new Exception($"В строке {i + 2} не число!");
+                    for (int j = 0; j < dim2; j++)
+                    {
+                        if (!int.TryParse(reader.ReadLine(), out array1[i, j])) throw new Exception($"В строке {i + 2} не число!");
+                    }
                 }
-
-
-
 
                 reader.Close();
                 return array1;
@@ -246,7 +254,7 @@ namespace Task4
                 throw new FileNotFoundException();
             }
         }
-        */
+        
     }
 
     class Program
@@ -259,7 +267,7 @@ namespace Task4
             int maxVal = 190;
 
             //int findMoreThenThis = 3;
-            int[] findMoreThenThis = { 0, 0 };
+            int[] findMoreThenThis = { 0, 2 };
 
 
             Array2d myArray2d = new Array2d(dim1, dim2, minVal, maxVal);
@@ -267,12 +275,12 @@ namespace Task4
 
             // вытаскиваем массив, созданный конструктором
             int[,] myArr = myArray2d.array2d;
-            
+
             // сумма элементов массива
             int summ = myArray2d.Sum(myArr);
 
             // Поиск суммы элементов массива больше заданного
-            
+
 
             int summFromHere = myArray2d.FindSummFromHere(myArr, findMoreThenThis);
 
@@ -332,7 +340,12 @@ namespace Task4
             Console.WriteLine();
             Console.WriteLine($"Свойство: минимальный элемент массива: {myArray2d.Min}");
             Console.WriteLine();
-            Console.WriteLine($"Свойство: максимальный элемент массива: {myArray2d.Max}");
+            Console.Write($"Свойство: максимальный элемент массива: ");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{myArray2d.Max}");
+            Console.ResetColor();
+
             Console.WriteLine();
             Console.WriteLine($"Индекс максимального элемента массива: {{ {maxElement[0]} : {maxElement[1]} }}");
             Console.WriteLine();
@@ -340,8 +353,22 @@ namespace Task4
             // это в задание не входит, но должно быть удобно
             Console.WriteLine($"Нажмите <Enter> чтобы открыть файл или другую кнопку, чтобы продолжить выполнение...");
             if (Console.ReadKey().Key == ConsoleKey.Enter) System.Diagnostics.Process.Start(filename2);
+            Console.ReadKey();
             // в этом месте можно поменять содержимое файла
-            
+            int[,] arrLoadedFromFile = myArray2d.Load2dArrayFromFile(filename2);
+
+            for (int i = 0; i < arrLoadedFromFile.GetLength(0); i++)
+            {
+                for (int j = 0; j < arrLoadedFromFile.GetLength(1); j++)
+                {
+
+                    Console.Write($"{arrLoadedFromFile[i, j]}\t");
+                    
+
+                }
+                Console.WriteLine();
+            }
+
             Console.ReadKey();
         }
     }
