@@ -38,26 +38,20 @@ namespace Task4
             /// </summary>
             /// <param name="_name">Имя</param>
             /// <param name="_lastName">Фамилия</param>
-            /// <param name="_grade1">Оценка №1</param>
-            /// <param name="_grade2">Оценка №2</param>
-            /// <param name="_grade3">Оценка №3</param>
+            
             /// <param name="_middleGrade">Средняя оценка</param>
-            public Students(string _name, string _lastName, byte _grade1, byte _grade2, byte _grade3, int _middleGrade)
+            public Students(string _name, string _lastName, double _middleGrade)
             {
                 name = _name;
                 lastName = _lastName;
-                grade1 = _grade1;
-                grade2 = _grade2;
-                grade3 = _grade3;
+                
                 middleGrade = _middleGrade;
             }
         
             public string name { get; }
             public string lastName { get; }
-            public byte grade1 { get; } 
-            public byte grade2 { get; } 
-            public byte grade3 { get; }
-            public int middleGrade { get; }
+            
+            public double middleGrade { get; }
         }
 
         public Students[] studentsArr;
@@ -91,8 +85,8 @@ namespace Task4
                                 {
                                     if ((byteValue1 >= 2 && byteValue1 <= 5) && (byteValue2 >= 2 && byteValue2 <= 5) && (byteValue3 >= 2 && byteValue3 <= 5))
                                     {
-                                        int midGr = (byteValue1 + byteValue2 + byteValue3) / 3;
-                                        Students student = new Students(lineArr[0], lineArr[1], byteValue1, byteValue2, byteValue3, midGr);
+                                        double midGr = Math.Round(((byteValue1 + byteValue2 + byteValue3) / 3.0f), 2);
+                                        Students student = new Students(lineArr[0], lineArr[1], midGr);
                                         studentsArr[i] = student;
 
                                     }
@@ -101,7 +95,13 @@ namespace Task4
                             } else Console.WriteLine($"Ошибка в строке {i + 2}. Имя и фамилия должны состоять из букв.");
                         } else Console.WriteLine($"Ошибка в строке {i + 2}. Имя или фамилия слишком длинные");
                     }
+                    // Сортируем структуру
+                    if (studentsArr.Length > 10)
+                    {
+                        Array.Sort<StudentsList.Students>(studentsArr, (x, y) => x.middleGrade.CompareTo(y.middleGrade));
+                    }
                 }
+
                 else
                 {
                     throw new Exception($"Строк меньше 10 или больше 100");
@@ -112,6 +112,55 @@ namespace Task4
                 throw new FileNotFoundException();
             }
         }
+        
+        public static Students[] WorstGrades(Students[] students)
+        {
+            Students[] worstStudentsTemp = new Students[students.Length];
+
+            byte counter = 1;
+            // Поскольку структура отсортирована. меньшим значением будет лежащее в нулевом индексе
+            double min = students[0].middleGrade;
+            worstStudentsTemp[0] = students[0];
+
+            int j = 1;
+
+            for (byte i = 1; i < students.Length; i++)
+            {
+                
+                if (students[i].middleGrade > min && counter < 3)
+                {
+                    worstStudentsTemp[j] = students[i];
+                    min = students[i].middleGrade;
+                    counter++;
+                    j++;
+                }
+                else if (students[i].middleGrade == min && counter <= 3)
+                {
+                    worstStudentsTemp[j] = students[i];
+                    min = students[i].middleGrade;
+                    
+                    j++;
+                }
+            }
+            // Чистим структуру, если это необходимо
+            if (worstStudentsTemp.Length > j)
+            {
+                Students[] worstStudents = new Students[j];
+                for (byte i = 0; i < worstStudents.Length; i++)
+                {
+                    worstStudents[i] = worstStudentsTemp[i];
+                }
+
+                return worstStudents;
+            }
+            else 
+            {
+                return worstStudentsTemp;
+            }
+
+        }
+        
+
     }
     class Program
     {
@@ -121,16 +170,23 @@ namespace Task4
             filename = AppDomain.CurrentDomain.BaseDirectory + filename;
             StudentsList students = new StudentsList(filename);
             StudentsList.Students[] studentsArray = students.studentsArr;
-            // Сортируем структуру
-            Array.Sort<StudentsList.Students>(studentsArray, (x, y) => x.middleGrade.CompareTo(y.middleGrade));
-            
-            for (byte i = 0; i < studentsArray.Length; i++)
+
+            StudentsList.Students[] worstStudents = StudentsList.WorstGrades(studentsArray);
+            Console.WriteLine($"Список студентов: ");
+            foreach (StudentsList.Students a in studentsArray)
             {
                
-                Console.WriteLine($"Средний балл студента {studentsArray[i].name} {studentsArray[i].lastName}: {studentsArray[i].middleGrade}");
+                Console.WriteLine($"Средний балл студента {a.name} {a.lastName}: {a.middleGrade}");
             }
+            Console.WriteLine();
+            Console.WriteLine($"Список худших студентов: ");
             
-            
+            foreach (StudentsList.Students a in worstStudents)
+            {
+
+                Console.WriteLine($"Средний балл студента {a.name} {a.lastName}: {a.middleGrade}");
+            }
+
             Console.ReadLine();
         }
     }
