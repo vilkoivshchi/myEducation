@@ -21,8 +21,9 @@ namespace Task3
     /// </summary>
     /// 
 
-    delegate List <CourseCount> CountStudents (int a, int b);
-
+    
+    delegate int CountStudentsBySomeParams(List<Student> students, sstring param);
+    
     class Student
     {
         public string firstName { get; set; }
@@ -49,34 +50,26 @@ namespace Task3
 
 
     }
-    class CourseCount
+    class CountedStudents
     {
         public int course { get; set; }
         public int studentOnCourse { get; set; }
 
-
-        public List<CourseCount> countedStudents = new List<CourseCount>();
-
-        public CourseCount()
+        public CountedStudents()
         {
 
         }
+        
         /// <summary>
-        /// Конструктор считает количество студентов на каждом курсе. 
-        /// Можно было бы просто вывести всё это в консоль, но с этим потом ничего не сделать.
+        /// Создаёт частотный массив из коллекции со студентами
         /// </summary>
-        /// <param name="studentsList">Лист с данными студентов</param>
-        /// <param name="minAge">Мин. курс</param>
-        /// <param name="maxAge">Макс. курс</param>
-        public CourseCount(List<Student> studentsList, int minAge, int maxAge)
+        /// <param name="studentsList">Коллекция студентов</param>
+        /// <param name="minAge">Минимальный возраст</param>
+        /// <param name="maxAge">Максимальный возраст</param>
+        /// <returns>Коллекция с распределением по курсам в указанном возрасте</returns>
+        public static List<CountedStudents> CountStudentsByAge (List<Student> studentsList, int minAge, int maxAge)
         {
-           /* 
-            for (int i = minAge; i <= maxAge; i++ )
-                {
-                    countedStudents.Add(new CourseCount() { course = i, studentOnCourse = 0});
-                }
-            foreach (CourseCount a in countedStudents) Console.WriteLine($"{a.course}; {a.studentOnCourse}");
-           */
+           List<CountedStudents> countedStudents = new List<CountedStudents>();
             for (int i = minAge; i <= maxAge; i++)
             {
                 
@@ -84,31 +77,64 @@ namespace Task3
                 {
                     if (a.age == i)
                     {
-                        if (countedStudents.Exists(x => x.course == a.course)) 
-                            {
-                                countedStudents.Add(new CourseCount() {course = a.course, studentOnCourse = 1});
-                            }
+                        if (!countedStudents.Exists(x => x.course == a.course)) 
+                        {
+                                countedStudents.Add(new CountedStudents() {course = a.course, studentOnCourse = 1});
+                        }
                         else 
-                            {
+                        {
+                            int index = countedStudents.FindIndex(w => w.course == a.course);
+                            countedStudents[index].studentOnCourse += 1;
+                            //Console.WriteLine(countedStudents[index].studentOnCourse);
                                 
-                                int index = countedStudents.FindIndex(w => w.course == a.course);
-                                Console.WriteLine(index);
-                                
-                            }
+                        }
                     }
                 }
                 
             }
-            //foreach (CourseCount a in countedStudents) Console.WriteLine($"{a.course}; {a.studentOnCourse}");
+            // сортируем массив по возрастанию курса
+            if (countedStudents.Count > 2) countedStudents.Sort((x, y) => x.course.CompareTo(y.course));
+            return countedStudents;
         }
 
-       
+        
 
+        public static int CountedCourses (List<Student> studentsList, int minCourse, int maxCourse)
+        {
+            int summ = 0;
+            for (int i = minCourse; i <= maxCourse; i++)
+            {
+                foreach (Student a in studentsList)
+                {
+                    if (a.course == i)
+                    {
+                        summ++;
+                    }
+                }
+            }
+            return summ;
+        }
+        
+        
     }
 
+    /// <summary>
+    /// Парсит список студентов из CSV
+    /// </summary>
     class StudentsParse
     {
         public List<Student> students = new List<Student>();
+        
+
+        static int CourceAgeCompare(Student student1, Student student2)
+        {
+            if (student1.course > student2.course) return 1;
+            if (student1.course < student2.course) return -1;
+            if (student1.age > student2.age) return 1;
+            if (student1.age < student2.age) return -1;
+            return 0;
+        }
+
         public StudentsParse(string filename)
         {
             if (File.Exists(filename))
@@ -141,10 +167,11 @@ namespace Task3
                         lineCounter++;
                     }
                 }
-                // Сортируем по возрасту
-                if (students.Count > 10)
+                // Сортируем по  возрасту
+                if (students.Count > 2)
                 {
-                  students.Sort((x, y) => x.age.CompareTo(y.age));
+                    // Сортируем массив по возрасту и курсу
+                    students.Sort(new Comparison<Student>(CourceAgeCompare));
                 }
             }
             
@@ -160,27 +187,54 @@ namespace Task3
 
             int minAge = 18;
             int maxAge = 20;
-            int studentsTotal = 0;
+
+            int minCourse = 5;
+            int maxCourse = 6;
+
+            
+
             // Передаём в конструктор файл, получаем лист из файла
+
             StudentsParse students = new StudentsParse(filename);
             List<Student> stud = students.students;
 
-            // Передаём в коструктор лист из файла и параметры выбора курса.
-            CourseCount courseCount = new CourseCount(stud, minAge, maxAge);
-            List<CourseCount> listOfStudents = courseCount.countedStudents;
-                        
+            // Считаем студентов по условию задачи
+            
+            List<CountedStudents> listOfStudents = CountedStudents.CountStudentsByAge(stud, minAge, maxAge);
+
+            int studentsTotal = CountedStudents.CountedCourses(stud, minCourse, maxCourse);
+
             foreach (Student a in stud) Console.WriteLine($"{a.ToString()}");
             Console.WriteLine();
-            Console.WriteLine($"На каждом курсе с {minAge} по {maxAge} учатся:");
-            foreach (CourseCount a in listOfStudents)
+
+            if (maxAge % 10 == 1)
+            {
+                Console.WriteLine($"В возрасте от {minAge} до {maxAge} года на каждом курсе учатся:");
+            }
+            else
+            {
+                Console.WriteLine($"В возрасте от {minAge} до {maxAge} лет накаждом курсе учатся:");
+            }
+            
+            
+
+            foreach (CountedStudents a in listOfStudents)
             {
 
                 Console.WriteLine($"{a.course} курс: {a.studentOnCourse} человек");
-                studentsTotal += a.studentOnCourse;
+            //    studentsTotal += a.studentOnCourse;
                 
             }
-            Console.WriteLine($"Всего c {minAge} по {maxAge} учатся: {studentsTotal} человек");
-            
+            Console.WriteLine();
+
+            if (studentsTotal % 10 >= 2 && studentsTotal % 10 <= 5 )
+            {
+                Console.WriteLine($"Всего c {minCourse} по {maxCourse} курс учатся: {studentsTotal} человека");
+            }
+            else
+            {
+                Console.WriteLine($"Всего c {minCourse} по {maxCourse} курс учатся: {studentsTotal} человек");
+            }
             
             Console.ReadKey();
         }
