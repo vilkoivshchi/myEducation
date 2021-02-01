@@ -70,7 +70,13 @@ namespace Task3
         /// <param name="maxAge">Макс. курс</param>
         public CourseCount(List<Student> studentsList, int minAge, int maxAge)
         {
-            
+           /* 
+            for (int i = minAge; i <= maxAge; i++ )
+                {
+                    countedStudents.Add(new CourseCount() { course = i, studentOnCourse = 0});
+                }
+            foreach (CourseCount a in countedStudents) Console.WriteLine($"{a.course}; {a.studentOnCourse}");
+           */
             for (int i = minAge; i <= maxAge; i++)
             {
                 
@@ -78,19 +84,22 @@ namespace Task3
                 {
                     if (a.age == i)
                     {
-                     switch (a.course)
-                        {
-                            case 1:
-                                a.course = 1;
-                                a.
-                                brake;
-                        }
-
+                        if (countedStudents.Exists(x => x.course == a.course)) 
+                            {
+                                countedStudents.Add(new CourseCount() {course = a.course, studentOnCourse = 1});
+                            }
+                        else 
+                            {
+                                
+                                int index = countedStudents.FindIndex(w => w.course == a.course);
+                                Console.WriteLine(index);
+                                
+                            }
                     }
                 }
-                countedStudents.Add(new CourseCount() { course = studentCourse, studentOnCourse = cnt });
+                
             }
-
+            //foreach (CourseCount a in countedStudents) Console.WriteLine($"{a.course}; {a.studentOnCourse}");
         }
 
        
@@ -171,7 +180,7 @@ namespace Task3
                 
             }
             Console.WriteLine($"Всего c {minAge} по {maxAge} учатся: {studentsTotal} человек");
-            Console.WriteLine($"{listOfStudents}");
+            
             
             Console.ReadKey();
         }
