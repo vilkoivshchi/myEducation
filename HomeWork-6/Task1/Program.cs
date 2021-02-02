@@ -12,82 +12,43 @@ namespace Task1
     /// Шмаков.
     /// </summary>
     
-
-
-    delegate double DoOperation(double x, double y);
+    public delegate double Fun(double a, double b);
 
     class Program
     {
-        static double Plus(double a, double b)
+        // Создаем метод, который принимает делегат
+        // На практике этот метод сможет принимать любой метод
+        // с такой же сигнатурой, как у делегата
+        public static void Table(Fun F, double x, double b)
         {
-            Console.Write($"{a} + {b}");
-            return a + b;
-        }
-
-        static double Minus(double a, double b)
-        {
-            Console.Write($"{a} - {b}");
-            return a - b;
-        }
-        /// <summary>
-        /// Первая часть задания
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        static double Pow2(double a, double x)
-        {
-            Console.Write($"{a} * {x}^2");
-            return a * Math.Pow((x), 2);
-        }
-
-        /// <summary>
-        /// Вторая часть задания
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        static double SinX(double a, double x)
-        {
-            Console.Write($"{a}*sin({x})");
-            return a * Math.Sin(x);
-        }
-
-        static void Process(DoOperation operation12, double x, double y)
-        {
-            Console.WriteLine($" = {operation12(x, y)}");
-            Console.WriteLine();
-        }
-
-        static void ProcessDivision(string txt, double x, double y, DoOperation operation12)
-        {
-            Console.WriteLine($" ({txt}): {operation12(x, y)}");
-        }
-       
-
-        static void Main(string[] args)
-        {
-            Process(Plus, 2, 3);
-            Process(Minus, 40, -3);
-            Process(Pow2, 2, 3);
-            Process(SinX, 2, 30);
-
-            DoOperation miltiOperation = delegate (double x, double y)
+            Console.WriteLine("----- X ----- Y -----");
+            while (x <= b)
             {
-                Console.Write($"{x} * {y}");
-                return x * y;
-            };
+                Console.WriteLine("| {0,8:0.000} | {1,8:0.000} |", x, F(x, b));
+                x += 1;
+            }
+            Console.WriteLine("---------------------");
+        }
+        // Функция a*x^2
+        public static double MyFunc(double x, double a)
+        {
+            return a * Math.Pow(x, 2);
+        }
+        
 
-            Console.WriteLine($" = {miltiOperation(5, 5)}");
-
-            ProcessDivision("Результат деления", 20, 2, delegate (double x, double y)
-            {
-                Console.Write($"{x} / {y}");
-                return x / y;
-            });
-
-           
+        static void Main()
+        {
+            // Создаем новый делегат и передаем ссылку на него в метод Table
+            
+            Console.WriteLine("Функция a*x^2");
+                        
+            Table(MyFunc, -2, 2);
+            
+            // Анонимный метод, считающий a*Sin(x)
+            Console.WriteLine("Таблица функции a*Sin(x):");
+            Table(delegate (double x, double a) { return a * Math.Sin(x); }, 0, 3);
             Console.ReadKey();
         }
     }
+
 }
