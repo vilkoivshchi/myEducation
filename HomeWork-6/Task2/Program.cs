@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
+
 
 
 namespace Task2
@@ -14,58 +14,86 @@ namespace Task2
     /// б) Используйте массив(или список) делегатов, в котором хранятся различные функции.
     /// в) * Переделайте функцию Load, чтобы она возвращала массив считанных значений.Пусть она
     /// возвращает минимум через параметр.
+    /// Шмаков.
     /// </summary>
     
     class Program
     {
-        /*
-        delegate double F(double x);
-
-        static double Func1(double x)
+        
+         
+        delegate double F(double x1, double x2);
+        
+        static double Func1(double x1, double x2)
         {
-            return x * x - 50 * x + 10;
-        }
-
-        static void CalcF(F func, int a)
-        {
-            Console.WriteLine($"{func(a)}");
-        }
-        static void SaveFunc(string fileName, double a, double b, double h)
-        {
-            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            BinaryWriter bw = new BinaryWriter(fs);
-            double x = a;
-            while (x <= b)
+            double step = 0.01;
+            double x = x1;
+            double y = 0;
+            double min = 0;
+            while (x <= x2)
             {
-                bw.Write(F(x));
-                x += h;// x=x+h;
+                
+                y = (Math.Pow(x, 4) / 4) - Math.Pow(x, 3);
+                if (min < y) y = min;
+                x += step;
+                
             }
-            bw.Close();
-            fs.Close();
+            return Math.Round(y, 4);
+            
         }
-        static double Load(string fileName)
+
+        static double Func2(double x1, double x2)
         {
-            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            BinaryReader bw = new BinaryReader(fs);
-            double min = double.MaxValue;
-            double d;
-            for (int i = 0; i < fs.Length / sizeof(double); i++)
+            double step = 0.01;
+            double x = x1;
+            double y = 0;
+            double min = 0;
+            while (x <= x2)
             {
-                // Считываем значение и переходим к следующему
-                d = bw.ReadDouble();
-                if (d < min) min = d;
+
+                y = (Math.Pow(x, 2)  - 8 * x + 1.0d );
+                if (min < y) y = min;
+                x += step;
+
             }
-            bw.Close();
-            fs.Close();
-            return min;
+            return Math.Round(y, 4);
+
         }
+
+        static void CalcF(F func, double a, double b)
+        {
+            Console.WriteLine($"{func(a, b)}");
+        }
+
         static void Main(string[] args)
         {
-            SaveFunc("data.bin", -100, 100, 0.5);
-            Console.WriteLine(Program.Load("data.bin"));
+            double x1 = -2.0d;
+            double x2 = 2.0d;
+            char cki;
+            Console.WriteLine($"Выберите функцию:");
+            Console.WriteLine($"1. y = (x ^ 4) / 4) - x ^ 3 ");
+            Console.WriteLine($"2. y = (x ^ 2) - 8x + 1 ");
+            Console.WriteLine();
+            // тут грабли
+            cki = Console.ReadKey().KeyChar;
+            
+                switch (cki)
+                {
+                    case '1':
+                    Console.WriteLine();
+                        CalcF(Func1, x1, x2);
+                        break;
+                    case '2':
+                    Console.WriteLine();
+                    CalcF(Func2, x1, x2);
+                        break;
+                }
+            
+        
+
+            
             Console.ReadKey();
         }
-        */
+        
     }
         
 }

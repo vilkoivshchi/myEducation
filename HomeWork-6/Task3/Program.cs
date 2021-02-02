@@ -18,11 +18,13 @@ namespace Task3
     /// выбора с помощью делегата и методов предикатов.
     /// 
     /// Переписывайте в начало программы условие и свою фамилию. Все программы сделайте в одном решении.
+    /// Шмаков.
     /// </summary>
     /// 
 
     
-    delegate int CountStudentsBySomeParams(List<Student> students, sstring param);
+    delegate int CountStudentsBySomeParams(List<Student> students, string param);
+
     
     class Student
     {
@@ -114,8 +116,36 @@ namespace Task3
             }
             return summ;
         }
-        
-        
+        // Поищем студентов по произвольному параметру
+        public static List<Student> UniversalSearch(List<Student> list, string x)
+        {
+
+            List<Student> newList = new List<Student>();
+            int intX;
+            foreach (Student obj in list)
+            {
+                if (Int32.TryParse(x, out intX))
+                {
+                    if (obj.age == intX || obj.course == intX)
+                    {
+                        newList.Add(obj);
+                    }
+                    
+                }
+                else
+                {
+                    if (obj.firstName.Contains(x) || obj.lastName.Contains(x))
+                    {
+                        newList.Add(obj);
+                    }
+                    
+                }
+                
+            }
+            
+            return newList;
+        }
+
     }
 
     /// <summary>
@@ -191,7 +221,7 @@ namespace Task3
             int minCourse = 5;
             int maxCourse = 6;
 
-            
+            string searchReq = "Мария";
 
             // Передаём в конструктор файл, получаем лист из файла
 
@@ -203,8 +233,9 @@ namespace Task3
             List<CountedStudents> listOfStudents = CountedStudents.CountStudentsByAge(stud, minAge, maxAge);
 
             int studentsTotal = CountedStudents.CountedCourses(stud, minCourse, maxCourse);
-
+            Console.WriteLine($"Массив студентов из файла: ");
             foreach (Student a in stud) Console.WriteLine($"{a.ToString()}");
+            Console.WriteLine($"Всего: {stud.Count}");
             Console.WriteLine();
 
             if (maxAge % 10 == 1)
@@ -222,8 +253,6 @@ namespace Task3
             {
 
                 Console.WriteLine($"{a.course} курс: {a.studentOnCourse} человек");
-            //    studentsTotal += a.studentOnCourse;
-                
             }
             Console.WriteLine();
 
@@ -235,7 +264,26 @@ namespace Task3
             {
                 Console.WriteLine($"Всего c {minCourse} по {maxCourse} курс учатся: {studentsTotal} человек");
             }
+
+            List<Student> student1 = CountedStudents.UniversalSearch(stud, searchReq);
             
+            Console.WriteLine();
+            Console.WriteLine($"Результат поиска \"{searchReq}\":");
+            
+            
+                if (student1.Count == 0)
+                {
+                    Console.WriteLine($"Ничего не найдено");
+                }
+                else
+                {
+                    foreach (Student student in student1)
+                    {
+                        Console.WriteLine($"{student.firstName} {student.lastName} {student.course} курс  {student.age} лет");
+                    }
+                }
+            
+
             Console.ReadKey();
         }
     }

@@ -9,6 +9,7 @@ namespace Task1
     /// <summary>
     /// 1. Изменить программу вывода функции так, чтобы можно было передавать функции типа double (double,double). 
     /// Продемонстрировать работу на функции с функцией a*x^2 и функцией a*sin(x).
+    /// Шмаков.
     /// </summary>
     
     public delegate double Fun(double a, double b);
