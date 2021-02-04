@@ -11,12 +11,15 @@ using System.Windows.Forms;
 namespace Task1
 {
 
-    public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
+    
     public partial class Form1 : Form
     {
-        public event EventHandler NumbersHandler;
-        public event SomeNumbersHandler SomeNumbersHandlerEvent;
 
+
+        public event EventHandler SomeEvent;
+
+        int number = 0;
+        int answer = 0;
         int counter = 0;
         int score = 0;
         public Form1()
@@ -26,101 +29,34 @@ namespace Task1
             button2.Text = "x2";
             button3.Text = "Сброс";
             button4.Text = "Играть";
-            label1.Text = $"Число: {score.ToString()}";
-            label2.Text = $"Ходов: {counter.ToString()}";
+            label1.Text = $"Число: {score}";
+            label2.Text = $"Ходов: {counter}";
+            if (number == 0)
+            {
+                label3.Text = "Число пока не придумано";
+                label4.Text = "Минимальное число ходов неисвестно";
+            }
+            else
+            {
+                label3.Text = $"Загаданное число: {number}";
+                label4.Text = $"Минимальное число ходов: {answer}";
+            }
             this.Text = "Удвоитель";
 
-            NumbersHandler += Form1_NumbersHandler1;
-            SomeNumbersHandlerEvent += Form1_SomeNumbersHandlerEvent;
+
+            SomeEvent += Form1_SomeEvent1;
+
 
         }
 
-        private void Form1_SomeNumbersHandlerEvent(object sender, SomeNumbers e)
+        private void Form1_SomeEvent1(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
-            string caption = $"Я загадал число {e.answer}";
-
-            string message = $"{e.number}";
-
-            score = 0;
-            counter = 0;
-            label1.Text = $"Число: {score}";
-            label2.Text = $"Ходов: {counter}";
-
-            MessageBox.Show(message, caption);
-        }
-
-        private void Form1_NumbersHandler1(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            score++;
-            counter++;
-            label1.Text = $"Число: {score}";
-            label2.Text = $"Ходов: {counter}";
-            //NumbersHandler.Invoke(sender, e);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            score *= 2;
-            counter++;
-            if (score > 10) NumbersHandler.Invoke(sender, e);
-            label1.Text = $"Число: {score}";
-            label2.Text = $"Ходов: {counter}";
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            score = 0;
-            counter = 0;
-            label1.Text = $"Число: {score}";
-            label2.Text = $"Ходов: {counter}";
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            SomeNumbersHandlerEvent.Invoke(sender, new SomeNumbers());
-            
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        //public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
-       
-    }
-    public class SomeNumbers : EventArgs
-    {
-        public int number { get; }
-        public int answer { get; }
-        
-        public SomeNumbers()
-        {
-            
             Random rand = new Random();
 
             number = rand.Next(50, 500);
 
             int number1 = number;
-            int answer = 0;
+            answer = 0;
 
             // Поищем наименьшее число ходов
             while (number1 > 0)
@@ -135,15 +71,127 @@ namespace Task1
                     number1--;
                     answer++;
                 }
+            }
+            if (number == 0)
+            {
+                label3.Text = "Число пока не придумано";
+                label4.Text = "Минимальное число ходов неисвестно";
+            }
+            else
+            {
+                label3.Text = $"Загаданное число: {number}";
+                label4.Text = $"Минимальное число ходов: {answer}";
+            }
+        }
 
+            private void button1_Click(object sender, EventArgs e)
+            {
+                score++;
+                counter++;
+                label1.Text = $"Число: {score}";
+                label2.Text = $"Ходов: {counter}";
+
+            if (score > number)
+            {
+                MessageBox.Show("Перебор");
+                score = 0;
+                counter = 0;
+            }
+            else if (counter > answer)
+            {
+                MessageBox.Show("Вы проиграли");
+                score = 0;
+                counter = 0;
+            }
+            if (number == 0)
+            {
+                label3.Text = "Число пока не придумано";
+                label4.Text = "Минимальное число ходов неисвестно";
+            }
+            else
+            {
+                label3.Text = $"Загаданное число: {number}";
+                label4.Text = $"Минимальное число ходов: {answer}";
             }
 
         }
-        /*
-        public static int CheckAnswer(int a)
-        {
+
+            private void button2_Click(object sender, EventArgs e)
+            {
+                score *= 2;
+                counter++;
+
+                label1.Text = $"Ваше число: {score}";
+                label2.Text = $"Ваши ходы: {counter}";
+            if (score > number)
+            {
+                MessageBox.Show("Перебор");
+                score = 0;
+                counter = 0;
+            }
+            else if (counter > answer)
+            {
+                MessageBox.Show("Вы проиграли");
+                score = 0;
+                counter = 0;
+            }
+            if (number == 0)
+            {
+                label3.Text = "Число пока не придумано";
+                label4.Text = "Минимальное число ходов неисвестно";
+            }
+            else
+            {
+                label3.Text = $"Загаданное число: {number}";
+                label4.Text = $"Минимальное число ходов: {answer}";
+            }
+        }
+
+            private void button3_Click(object sender, EventArgs e)
+            {
+                score = 0;
+                counter = 0;
+            label1.Text = $"Ваше число: {score}";
+            label2.Text = $"Ваши ходы: {counter}";
 
         }
-        */
+            private void button4_Click(object sender, EventArgs e)
+            {
+
+           if (SomeEvent != null)
+            {
+                SomeEvent.Invoke(sender,  e);
+            }
+            string caption = $"Я загадал некое число";
+
+            string message = $"{number}";
+
+            score = 0;
+            counter = 0;
+            label1.Text = $"Ваше число: {score}";
+            label2.Text = $"Ваши ходы: {counter}";
+
+            MessageBox.Show(message, caption);
+        }
+
+            private void label3_Click(object sender, EventArgs e)
+            {
+
+            }
+
+            private void Form1_Load(object sender, EventArgs e)
+            {
+
+            }
+
+            private void label2_Click(object sender, EventArgs e)
+            {
+
+            }
+
+            //public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
+
+        }
+
     }
-}
+
