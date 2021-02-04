@@ -10,8 +10,15 @@ using System.Windows.Forms;
 
 namespace Task1
 {
+
+    public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
     public partial class Form1 : Form
     {
+        public event EventHandler NumbersHandler;
+        public event SomeNumbersHandler SomeNumbersHandlerEvent;
+
+        int counter = 0;
+        int score = 0;
         public Form1()
         {
             InitializeComponent();
@@ -19,40 +26,66 @@ namespace Task1
             button2.Text = "x2";
             button3.Text = "Сброс";
             button4.Text = "Играть";
-            label1.Text = "0";
-            label2.Text = "0";
+            label1.Text = $"Число: {score.ToString()}";
+            label2.Text = $"Ходов: {counter.ToString()}";
             this.Text = "Удвоитель";
+
+            NumbersHandler += Form1_NumbersHandler1;
+            SomeNumbersHandlerEvent += Form1_SomeNumbersHandlerEvent;
 
         }
 
+        private void Form1_SomeNumbersHandlerEvent(object sender, SomeNumbers e)
+        {
+            //throw new NotImplementedException();
+            string caption = $"Я загадал число {e.answer}";
+
+            string message = $"{e.number}";
+
+            score = 0;
+            counter = 0;
+            label1.Text = $"Число: {score}";
+            label2.Text = $"Ходов: {counter}";
+
+            MessageBox.Show(message, caption);
+        }
+
+        private void Form1_NumbersHandler1(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text = (int.Parse(label1.Text) + 1).ToString();
-            label2.Text = (int.Parse(label2.Text) + 1).ToString();
+            score++;
+            counter++;
+            label1.Text = $"Число: {score}";
+            label2.Text = $"Ходов: {counter}";
+            //NumbersHandler.Invoke(sender, e);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            label1.Text = (int.Parse(label1.Text) * 2).ToString();
-            label2.Text = (int.Parse(label2.Text) + 1).ToString();
+            score *= 2;
+            counter++;
+            if (score > 10) NumbersHandler.Invoke(sender, e);
+            label1.Text = $"Число: {score}";
+            label2.Text = $"Ходов: {counter}";
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            label1.Text = "0";
-            label2.Text = "0";
+            score = 0;
+            counter = 0;
+            label1.Text = $"Число: {score}";
+            label2.Text = $"Ходов: {counter}";
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            string caption = "Я загадал число";
+            SomeNumbersHandlerEvent.Invoke(sender, new SomeNumbers());
             
-            string message = numbers.number.ToString();
-            
-            label1.Text = "0";
-            label2.Text = "0";
-
-            MessageBox.Show(message, caption);
 
         }
 
@@ -71,44 +104,46 @@ namespace Task1
 
         }
 
-        public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
-       public class SomeNumbers
+        //public delegate void SomeNumbersHandler(object sender, SomeNumbers e);
+       
+    }
+    public class SomeNumbers : EventArgs
+    {
+        public int number { get; }
+        public int answer { get; }
+        
+        public SomeNumbers()
         {
-            public int number { get; }
-            public int answer { get; }
-            public SomeNumbers()
+            
+            Random rand = new Random();
+
+            number = rand.Next(50, 500);
+
+            int number1 = number;
+            int answer = 0;
+
+            // Поищем наименьшее число ходов
+            while (number1 > 0)
             {
-                int[] finalArr = new int[2];
-                
-                Random rand = new Random();
-
-                number = rand.Next(50, 500);
-                
-                int answer = 0;
-                
-                // Поищем наименьшее число ходов
-                while (number > 0)
+                if (number1 % 2 == 0)
                 {
-                    if (number % 2 == 0)
-                    {
-                        number /= 2;
-                        answer++;
-                    }
-                    else
-                    {
-                        number--;
-                        answer++;
-                    }
-
+                    number1 /= 2;
+                    answer++;
+                }
+                else
+                {
+                    number1--;
+                    answer++;
                 }
 
             }
-            /*
-            public static int CheckAnswer(int a)
-            {
-               
-            }
-            */
+
         }
+        /*
+        public static int CheckAnswer(int a)
+        {
+
+        }
+        */
     }
 }
