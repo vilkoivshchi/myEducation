@@ -28,14 +28,16 @@ namespace Task1
     int answer = 0;
     int counter = 0;
     int score = 0;
-        int CurrentListPos = 0;
+       // int CurrentListPos = 0;
 
     List<Turns> actionList = new List<Turns>();
 
     public Form1()
     {
       InitializeComponent();
-      plus1.Text = "+1";
+        
+    
+            plus1.Text = "+1";
       x2.Text = "x2";
       reset.Text = "Сброс";
       Begin.Text = "Играть";
@@ -95,8 +97,9 @@ namespace Task1
         label3.Text = $"Загаданное число: {number}";
         label4.Text = $"Минимальное число ходов: {answer}";
       }
+            actionList.Clear();
 
-    }
+        }
     // +1
     private void button1_Click(object sender, EventArgs e)
     {
@@ -220,15 +223,16 @@ namespace Task1
     {
 
     }
-
+        // Кнопка отмены, показывает всякую дичь, нужно разобраться
         private void Undo_Click(object sender, EventArgs e)
         {
-            CurrentListPos = actionList.Count;
-            if (CurrentListPos > 2)
+            int CurrentListPos = actionList.Count - 1;
+            if (actionList.Count > 0)
             {
-                counter = actionList[CurrentListPos - 2].TurnNumber;
-                score = actionList[CurrentListPos - 2].TurnAnswer;
-                actionList.RemoveAt(CurrentListPos - 2);
+                counter = actionList[CurrentListPos].TurnNumber;
+                score = actionList[CurrentListPos].TurnAnswer;
+                actionList.RemoveRange(CurrentListPos, actionList.Count - CurrentListPos);
+                //actionList.RemoveAt(CurrentListPos - 2);
                 label1.Text = $"Ваше число: {score}";
                 label2.Text = $"Ваши ходы: {counter}";
             }
