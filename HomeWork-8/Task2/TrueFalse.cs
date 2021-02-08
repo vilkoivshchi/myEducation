@@ -59,8 +59,10 @@ namespace Task3
         {
             using(StreamReader reader = new StreamReader(fileName))
             {
-                
-                string[] line = reader.ReadLine().Split(';');
+                while (!reader.EndOfStream)
+                {
+                    string[] line = reader.ReadLine().Split(';');
+                }
             }
         }
 
