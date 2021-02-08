@@ -22,10 +22,13 @@ namespace SApp03
     public partial class Form1 : Form
     {
         private TrueFalse database;
+        public string formHeader = "Question editor";
         
         public Form1()
         {
             InitializeComponent();
+            this.Text = formHeader;
+            
         }
 
         private void menuItemExit_Click(object sender, EventArgs e)
@@ -66,7 +69,9 @@ namespace SApp03
                     tbQuestion.Text = database[0].Text;
                     cbTrue.Checked = database[0].TrueFalse;
                 }
+                this.Text = formHeader + $" - {openFileDialog.FileName}";
             }
+
         }
 
         /// <summary>
@@ -98,7 +103,7 @@ namespace SApp03
         {
             if (database == null)
             {
-                MessageBox.Show("Создайте базу данных!");
+                MessageBox.Show("Create database first!", "Oooops...", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -111,14 +116,21 @@ namespace SApp03
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            var dialog = MessageBox.Show("Delete question?", "Confim deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialog == DialogResult.Yes)
+            if (database != null)
             {
-                if (nudNumber.Maximum == 1 || database == null)
-                    return;
-                database.Remove((int)nudNumber.Value - 1);
-                nudNumber.Maximum--;
-                database.Save();
+                var dialog = MessageBox.Show("Delete question?", "Confim deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialog == DialogResult.Yes)
+                {
+                    if (nudNumber.Maximum == 1 || database == null)
+                        return;
+                    database.Remove((int)nudNumber.Value - 1);
+                    nudNumber.Maximum--;
+                    database.Save();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Create database first!", "Oooops...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -131,7 +143,7 @@ namespace SApp03
             }
             else
             {
-                MessageBox.Show("БД не создана.");
+                MessageBox.Show("Create database first!", "Oooops...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             } 
         }
 
@@ -144,13 +156,16 @@ namespace SApp03
 
         private void cbTrue_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbTrue.Checked)
+            if (database != null)
             {
-                database[(int)nudNumber.Value - 1].TrueFalse = true;
-            }
-            else
-            {
-                database[(int)nudNumber.Value - 1].TrueFalse = false;
+                if (cbTrue.Checked)
+                {
+                    database[(int)nudNumber.Value - 1].TrueFalse = true;
+                }
+                else
+                {
+                    database[(int)nudNumber.Value - 1].TrueFalse = false;
+                }
             }
         }
 
@@ -161,17 +176,24 @@ namespace SApp03
             if (database != null)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
+                
                 saveFileDialog.Filter = "xml files (*.xml)|*.xml";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     database.SaveAs(saveFileDialog.FileName);
                 }
+                this.Text = formHeader + $" - {saveFileDialog.FileName}";
 
             }
             else
             {
-                MessageBox.Show("БД не создана.");
+                MessageBox.Show("Create database first!", "Oooops...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
