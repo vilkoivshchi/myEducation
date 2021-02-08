@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SApp03
+namespace Task1
 {
     /// <summary>
     /// 1. а) Создать приложение, показанное на уроке, добавив в него защиту от возможных ошибок 

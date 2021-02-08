@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace SApp03
+namespace Task1
 {
     public class TrueFalse
     {
