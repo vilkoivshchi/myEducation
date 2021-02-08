@@ -63,6 +63,14 @@ namespace SApp03
                 xmlSerializer.Serialize(fileStream, list);
             }
         }
+        public void SaveAs(string fileNameSaveAs)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Question>));
+            using (FileStream fileStream = new FileStream(fileNameSaveAs, FileMode.Create, FileAccess.Write))
+            {
+                xmlSerializer.Serialize(fileStream, list);
+            }
+        }
 
 
     }

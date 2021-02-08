@@ -105,21 +105,28 @@ namespace SApp03
             database.Add((database.Count + 1).ToString(), true);
             nudNumber.Maximum = database.Count;
             nudNumber.Value = database.Count;
+            database.Save();
 
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (nudNumber.Maximum == 1 || database == null)
-                return;
-            database.Remove((int)nudNumber.Value - 1);
-            nudNumber.Maximum--;
+            var dialog = MessageBox.Show("Delete question?", "Confim deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialog == DialogResult.Yes)
+            {
+                if (nudNumber.Maximum == 1 || database == null)
+                    return;
+                database.Remove((int)nudNumber.Value - 1);
+                nudNumber.Maximum--;
+                database.Save();
+            }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (database != null)
             {
+
                 database.Save();
             }
             else
@@ -133,6 +140,38 @@ namespace SApp03
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             MessageBox.Show($"Training application\n" +
                 $"v.{version}", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void cbTrue_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbTrue.Checked)
+            {
+                database[(int)nudNumber.Value - 1].TrueFalse = true;
+            }
+            else
+            {
+                database[(int)nudNumber.Value - 1].TrueFalse = false;
+            }
+        }
+
+       
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (database != null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "xml files (*.xml)|*.xml";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    database.SaveAs(saveFileDialog.FileName);
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("БД не создана.");
+            }
         }
     }
 }
