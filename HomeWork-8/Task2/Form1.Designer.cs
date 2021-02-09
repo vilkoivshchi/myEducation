@@ -1,5 +1,5 @@
 ﻿
-namespace Task3
+namespace Task2
 {
     partial class Form1
     {
@@ -29,68 +29,67 @@ namespace Task3
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.sourceFileName = new System.Windows.Forms.TextBox();
-            this.destFileName = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.QuestionLabel = new System.Windows.Forms.Label();
+            this.btnYes = new System.Windows.Forms.Button();
+            this.btnNo = new System.Windows.Forms.Button();
+            this.ScoreLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // QuestionLabel
             // 
-            this.button1.Location = new System.Drawing.Point(32, 30);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Source";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.QuestionLabel.AutoSize = true;
+            this.QuestionLabel.Location = new System.Drawing.Point(31, 16);
+            this.QuestionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.QuestionLabel.Name = "QuestionLabel";
+            this.QuestionLabel.Size = new System.Drawing.Size(45, 16);
+            this.QuestionLabel.TabIndex = 0;
+            this.QuestionLabel.Text = "label1";
             // 
-            // button2
+            // btnYes
             // 
-            this.button2.Location = new System.Drawing.Point(32, 73);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Destination";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnYes.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnYes.Location = new System.Drawing.Point(361, 294);
+            this.btnYes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnYes.Name = "btnYes";
+            this.btnYes.Size = new System.Drawing.Size(100, 28);
+            this.btnYes.TabIndex = 1;
+            this.btnYes.Text = "Да";
+            this.btnYes.UseVisualStyleBackColor = true;
             // 
-            // sourceFileName
+            // btnNo
             // 
-            this.sourceFileName.Location = new System.Drawing.Point(144, 32);
-            this.sourceFileName.Name = "sourceFileName";
-            this.sourceFileName.Size = new System.Drawing.Size(460, 20);
-            this.sourceFileName.TabIndex = 2;
+            this.btnNo.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnNo.Location = new System.Drawing.Point(496, 294);
+            this.btnNo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnNo.Name = "btnNo";
+            this.btnNo.Size = new System.Drawing.Size(100, 28);
+            this.btnNo.TabIndex = 2;
+            this.btnNo.Text = "Нет";
+            this.btnNo.UseVisualStyleBackColor = true;
             // 
-            // destFileName
+            // ScoreLabel
             // 
-            this.destFileName.Location = new System.Drawing.Point(144, 76);
-            this.destFileName.Name = "destFileName";
-            this.destFileName.Size = new System.Drawing.Size(460, 20);
-            this.destFileName.TabIndex = 3;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(32, 119);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Convert";
-            this.button3.UseVisualStyleBackColor = true;
+            this.ScoreLabel.AutoSize = true;
+            this.ScoreLabel.Location = new System.Drawing.Point(711, 300);
+            this.ScoreLabel.Name = "ScoreLabel";
+            this.ScoreLabel.Size = new System.Drawing.Size(0, 16);
+            this.ScoreLabel.TabIndex = 3;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(691, 282);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.destFileName);
-            this.Controls.Add(this.sourceFileName);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(991, 358);
+            this.Controls.Add(this.ScoreLabel);
+            this.Controls.Add(this.btnNo);
+            this.Controls.Add(this.btnYes);
+            this.Controls.Add(this.QuestionLabel);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -98,11 +97,10 @@ namespace Task3
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox sourceFileName;
-        private System.Windows.Forms.TextBox destFileName;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label QuestionLabel;
+        private System.Windows.Forms.Button btnYes;
+        private System.Windows.Forms.Button btnNo;
+        private System.Windows.Forms.Label ScoreLabel;
     }
 }
 

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Task3
+namespace Task1
 {
     public class TrueFalse
     {
@@ -41,7 +41,7 @@ namespace Task3
             if (list != null && index < list.Count && index >= 0)
                 list.RemoveAt(index);
         }
-        /*
+
         public void Load()
         {
             
@@ -53,17 +53,6 @@ namespace Task3
             }
             
             
-        }
-        */
-        public void LoadCSV()
-        {
-            using(StreamReader reader = new StreamReader(fileName))
-            {
-                while (!reader.EndOfStream)
-                {
-                    string[] line = reader.ReadLine().Split(';');
-                }
-            }
         }
 
         public void Save()
