@@ -76,6 +76,7 @@ namespace Task2
                 questionsInRound = trackBar1.Value;
                 trackBar1.Enabled = false;
                 isGameRun = true;
+                currRoundQuestion = 1;
                 QuestCount.Text = $"Вопрос {currRoundQuestion} из {questionsInRound}";
             }
             else
@@ -151,7 +152,7 @@ namespace Task2
         {
             if (isGameRun)
             {
-                if (currRoundQuestion <= questionsInRound)
+                if (currRoundQuestion < questionsInRound)
                 {
                     if (!currAnswer)
                     {
